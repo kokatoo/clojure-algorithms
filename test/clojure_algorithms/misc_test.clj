@@ -12,3 +12,8 @@
       (is (= 832040
              (fib 30)))))
 
+(deftest factorial-test
+  (testing
+      (is (= 2432902008176640000
+             (factorial 20)))))
+

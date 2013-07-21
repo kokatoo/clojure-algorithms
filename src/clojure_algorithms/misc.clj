@@ -7,6 +7,9 @@
 (defn fib [n]
   (last (take n (fib-seq))))
 
+(defn factorial [n]
+  (reduce * (take n (iterate inc 1))))
+
 
 
 
