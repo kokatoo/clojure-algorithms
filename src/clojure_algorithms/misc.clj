@@ -24,8 +24,8 @@
   (if (< n base) [n]
       (conj (convert (quot n base) base) (mod n base))))
 
-(defn pascal-triangle
-  ([num-rows] (take num-rows (iterate #(concat [1] (map + % (rest %)) [1]) [1]))))
+(defn pascal-triangle [num-rows]
+  (take num-rows (iterate #(concat [1] (map + % (rest %)) [1]) [1])))
 
 
 
