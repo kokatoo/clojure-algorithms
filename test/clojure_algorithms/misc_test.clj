@@ -17,3 +17,17 @@
       (is (= 2432902008176640000
              (factorial 20)))))
 
+(deftest gcd-test
+  (testing
+      (is (= 9
+             (gcd 12345678 87654321)))))
+
+(deftest lcm-test
+  (testing
+      (is (= 120239113597182
+             (lcm 12345678 87654321)))))
+
+(deftest dot-product-test
+  (testing
+      (is (= 156
+             (dot-product (range 1 9) (range 9 0 -1))))))

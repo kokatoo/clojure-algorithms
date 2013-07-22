@@ -10,6 +10,16 @@
 (defn factorial [n]
   (reduce * (take n (iterate inc 1))))
 
+(defn gcd [a b]
+  (if (zero? a) b
+      (recur (mod b a) a)))
+
+(defn lcm [a b]
+  (/ (* a b) (gcd a b)))
+
+(defn dot-product [x y]
+  (apply + (map * x y)))
+
 
 
 
