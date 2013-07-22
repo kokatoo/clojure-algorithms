@@ -20,6 +20,8 @@
 (defn dot-product [x y]
   (apply + (map * x y)))
 
-
+(defn convert [n base]
+  (if (< n base) [n]
+      (conj (convert (quot n base) base) (mod n base))))
 
 

@@ -31,3 +31,13 @@
   (testing
       (is (= 156
              (dot-product (range 1 9) (range 9 0 -1))))))
+
+(deftest convert-test
+  (testing
+      (is (= [1 1 1 1 1 0 0 1 1 1]
+             (convert 999 2)))
+    (is (= [1 7 4 7]
+           (convert 999 8)))
+    (is (= [3 14 7]
+           (convert 999 16)))))
+
