@@ -51,12 +51,7 @@
             next-prime (first (filter #(> % prime) new-seq))]
         (recur next-prime new-seq)))))
 
-
-
-
-
-
-
-
-
+(defn perfect-squares []
+  (filter #(let [x (int (Math/sqrt %))]
+             (= (* x x) %)) (iterate inc 1)))
 
