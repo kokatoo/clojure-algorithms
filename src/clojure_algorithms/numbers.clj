@@ -55,3 +55,6 @@
   (filter #(let [x (int (Math/sqrt %))]
              (= (* x x) %)) (iterate inc 1)))
 
+(defn cartesian-products [coll1 coll2]
+  (into #{} (for [x coll1 y coll2] [x y])))
+
