@@ -27,21 +27,21 @@
 (defn pascal-triangle [num-rows]
   (take num-rows (iterate #(concat [1] (map + % (rest %)) [1]) [1])))
 
-(defn- factors [condition?]
-  #(loop [factors [] n % factor 2]
-     (cond
-      (condition? factor %) factors
-      (zero? (mod n factor)) (recur (conj factors factor) (/ n factor) factor)
-      :else (recur factors n (inc factor)))))
 
-(defn prime-factors [num]
-  ((factors #(> % %2)) num))
+(defn prime-factors
+  ([num] (prime-factors num #(> % %2)))
+  ([num terminate?]
+     (loop [factors [] n num factor 2]
+       (cond
+        (terminate? factor num) factors
+        (zero? (mod n factor)) (recur (conj factors factor) (/ n factor) factor)
+        :else (recur factors n (inc factor))))))
 
 (defn prime-seq []
-  (let [_factors (factors #(> % (Math/sqrt %2)))]
+  (let [terminate? #(> % (Math/sqrt %2))]
     (lazy-cat [2 3 5 7 11 13]
-            (filter #(empty? (_factors %))
-                    (iterate inc 15)))))
+              (filter #(empty? (prime-factors % terminate?))
+                      (iterate inc 15)))))
 
 (defn sieve [n]
   (loop [prime 2 seq (range 2 (inc n))]
