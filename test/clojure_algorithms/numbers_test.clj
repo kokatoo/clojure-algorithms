@@ -1,6 +1,6 @@
-(ns clojure-algorithms.misc-test
+(ns clojure-algorithms.numbers-test
   (:require [clojure.test :refer :all]
-            [clojure-algorithms.misc :refer :all]))
+            [clojure-algorithms.numbers :refer :all]))
 
 (deftest fib-seq-test
   (testing

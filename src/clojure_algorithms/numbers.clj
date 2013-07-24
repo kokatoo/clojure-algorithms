@@ -1,4 +1,4 @@
-(ns clojure-algorithms.misc)
+(ns clojure-algorithms.numbers)
 
 (defn fib-seq
   ([] (fib-seq 1 1))
