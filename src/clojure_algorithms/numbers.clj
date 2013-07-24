@@ -27,7 +27,6 @@
 (defn pascal-triangle [num-rows]
   (take num-rows (iterate #(concat [1] (map + % (rest %)) [1]) [1])))
 
-
 (defn prime-factors
   ([num] (prime-factors num #(> % %2)))
   ([num terminate?]
