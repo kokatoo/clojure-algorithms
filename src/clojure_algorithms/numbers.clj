@@ -62,3 +62,13 @@
 (defn cartesian-products [coll1 coll2]
   (into #{} (for [x coll1 y coll2] [x y])))
 
+(defn combinations [coll]
+  (reduce (fn [acc item]
+            (reduce #(conj % (conj %2 item)) acc acc))
+          #{#{}} coll))
+
+(defn k-combinations [k coll]
+  (set (filter #(= (count %) k)
+               (reduce (fn [acc item]
+                         (reduce #(conj % (conj %2 item)) acc acc))
+                       #{#{}} coll))))
