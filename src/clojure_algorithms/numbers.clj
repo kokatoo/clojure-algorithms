@@ -42,6 +42,11 @@
               (filter #(empty? (prime-factors % terminate?))
                       (iterate inc 15)))))
 
+(defn prime-seq-2 []
+  (lazy-cat [2 3 5 7 11 13]
+            (filter (fn [x] (every? #(not (zero? %)) (map #(mod x %) (range 2 (Math/sqrt x)))))
+                    (iterate inc 15))))
+
 (defn sieve [n]
   (loop [prime 2 seq (range 2 (inc n))]
     (if (> (* prime prime) n)
