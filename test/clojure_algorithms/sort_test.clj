@@ -1,4 +1,4 @@
-(ns clojure-algorithms.numbers-test
+(ns clojure-algorithms.sort-test
   (:require [clojure.test :refer :all]
             [clojure-algorithms.sort :refer :all]))
 
@@ -34,4 +34,16 @@
   (is (= (insert-sort (range 100 0 -1))
            (range 1 101)))
   (is (= (insert-sort unsorted) sorted)))
+
+(deftest merge-sort-test
+  (is (= (merge-sort []) []))
+  (is (= (merge-sort (range 100 0 -1))
+           (range 1 101)))
+  (is (= (merge-sort unsorted) sorted)))
+
+(deftest merge-sort-iter-test
+  (is (= (merge-sort-iter []) []))
+  (is (= (merge-sort-iter (range 100 0 -1))
+           (range 1 101)))
+  (is (= (merge-sort-iter unsorted) sorted)))
 
