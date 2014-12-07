@@ -3,8 +3,8 @@
 (defn insert-sort [coll]
   "insertion sort"
   (letfn [(insert [elm coll]
-                  (let [[left right] (split-with (partial >= elm) coll)]
-                   (doall (reduce concat [left [elm] right]))))]
+                  (into []
+                   (concat (filter #(<= % elm) coll) [elm] (filter #(> % elm) coll))))]
     (loop [left []
            right coll]
       (if (empty? right)
