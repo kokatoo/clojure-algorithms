@@ -1,7 +1,7 @@
 (ns clojure-algorithms.sort)
 
 (defn insert-sort [coll]
-  "insertion sort"
+  "Insertion Sort"
   (letfn [(insert [elm coll]
                   (into []
                    (concat (filter #(<= % elm) coll) [elm] (filter #(> % elm) coll))))]
@@ -12,6 +12,7 @@
         (recur (insert (first right) left) (rest right))))))
          
 (defn *merge [left right]
+  "Merge two sorted collections into sorted collection"
   (cond (nil? left) right
         (nil? right) left
         :else (let [[l1 & *left] left
@@ -20,22 +21,8 @@
                   (cons l1 (*merge *left right))
                   (cons r1 (*merge left *right))))))
                 
-(defn merge-sort [coll]
-  (let [[elm & *coll] coll]
-    (if (nil? *coll)
-      coll
-      (let [[left right] (split-at (/ (count coll) 2) coll)]
-        (*merge (merge-sort left) (merge-sort right))))))
-      
-(defn merge-sort-iter [coll]
-  (let [[elm & *coll] coll]
-    (if (nil? *coll)
-      coll
-      (let [[left right] (split-at (/ (count coll) 2) coll)]
-        (*merge-iter (trampoline #(merge-sort-iter left))
-                     (trampoline #(merge-sort-iter right)))))))
-
 (defn *merge-iter [left right]
+  "Merge two sorted collections into sorted collection (Iteration)"
   (letfn [(**merge [left right result]
                    (let [[l1 & *left] left
                          [r1 & *right] right]
@@ -45,8 +32,25 @@
                         (if (<= l1 r1)
                           (recur *left right (conj result l1))
                           (recur left *right (conj result r1)))
-                       (nil? l1)
-                         (recur left *right (conj result r1))
-                       (nil? r1)
-                         (recur *left right (conj result l1)))))]
+                      (nil? l1)
+                        (recur left *right (conj result r1))
+                      (nil? r1)
+                        (recur *left right (conj result l1)))))]
     (**merge left right [])))
+                
+(defn merge-sort [coll]
+  "Merge Sort"
+  (let [[elm & *coll] coll]
+    (if (nil? *coll)
+      coll
+      (let [[left right] (split-at (/ (count coll) 2) coll)]
+        (*merge (merge-sort left) (merge-sort right))))))
+      
+(defn merge-sort-iter [coll]
+  "Merge Sort (Iteration)"
+  (let [[elm & *coll] coll]
+    (if (nil? *coll)
+      coll
+      (let [[left right] (split-at (/ (count coll) 2) coll)]
+        (*merge-iter (trampoline #(merge-sort-iter left))
+                     (trampoline #(merge-sort-iter right)))))))
