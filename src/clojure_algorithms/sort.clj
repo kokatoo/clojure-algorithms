@@ -38,15 +38,29 @@
                         (recur *left right (conj result l1)))))]
     (**merge left right [])))
 
-(defn merge-sort
-  "Merge Sort"
-  ([coll] (merge-sort coll false))
-  ([coll iterate?]
-   (let [[elm & *coll] coll]
+(defn merge-sort-wrapper
+  "Wrap common splitting code"
+  [coll *merge-sort]
+  (let [[elm & *coll] coll]
     (if (nil? *coll)
       coll
       (let [[left right] (split-at (/ (count coll) 2) coll)]
-        (if iterate?
-          (*merge (merge-sort left) (merge-sort right))
-          (*merge-iter (trampoline #(merge-sort left true))
-                       (trampoline #(merge-sort right true)))))))))
+        (*merge-sort left right)))))
+
+
+(defn merge-sort
+  "Merge Sort (Recursive)"
+  [coll]
+  (merge-sort-wrapper
+   coll
+   (fn [left right]
+     (*merge (merge-sort left) (merge-sort right)))))
+
+(defn merge-sort-iter
+  "Merge Sort (Iterative)"
+  [coll]
+  (merge-sort-wrapper
+   coll
+   (fn [left right]
+     (*merge-iter (trampoline #(merge-sort-iter left))
+                  (trampoline #(merge-sort-iter right))))))

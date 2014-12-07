@@ -42,8 +42,8 @@
   (is (= (merge-sort unsorted) sorted)))
 
 (deftest merge-sort-iter-test
-  (is (= (merge-sort [] true) []))
-  (is (= (merge-sort (range 100 0 -1) true)
+  (is (= (merge-sort-iter []) []))
+  (is (= (merge-sort-iter (range 100 0 -1))
            (range 1 101)))
-  (is (= (merge-sort unsorted true) sorted)))
+  (is (= (merge-sort-iter unsorted) sorted)))
 
