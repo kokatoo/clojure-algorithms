@@ -1,11 +1,10 @@
 (ns clojure-algorithms.optimization)
 
 (defn max-idx-sum [coll offset-fn]
-  (if (empty? coll) nil
     (let [sums (map #(apply + %) coll)
           max-sum (apply max sums)
           idx (.indexOf sums (apply max sums))]
-      [(offset-fn idx), max-sum])))
+      [(offset-fn idx), max-sum]))
 
 (defn max-cross-subarray [coll low mid high]
   (let [lefts (subvec coll low (inc mid))
