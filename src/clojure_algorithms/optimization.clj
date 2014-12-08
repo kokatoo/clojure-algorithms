@@ -1,17 +1,17 @@
 (ns clojure-algorithms.optimization)
 
-(defn max-idx-sum [coll offset-fn offset]
+(defn max-idx-sum [coll offset-fn]
   (if (empty? coll) nil
     (let [sums (map #(apply + %) coll)
           max-sum (apply max sums)
           idx (.indexOf sums (apply max sums))]
-      [(offset-fn offset idx), max-sum])))
+      [(offset-fn idx), max-sum])))
 
 (defn max-cross-subarray [coll low mid high]
   (let [lefts (subvec coll low (inc mid))
         rights (subvec coll (inc mid) (inc high))
-        [left-idx, left-sum] (max-idx-sum (take (count lefts) (iterate rest lefts)) + low)
-        [right-idx, right-sum] (max-idx-sum2 (take (count rights) (iterate drop-last rights)) - high)]
+        [left-idx, left-sum] (max-idx-sum (take (count lefts) (iterate rest lefts)) (partial + low))
+        [right-idx, right-sum] (max-idx-sum (take (count rights) (iterate drop-last rights)) (partial - high))]
     [left-idx, right-idx, (+ left-sum right-sum)]))
 
 ;(take 3 (iterate rest [20 18 -23]))
@@ -34,4 +34,5 @@
 
 
 (max-subarray [13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7]); 7 10 43
-(max-subarray [-2 -5 6 -2 -3 1 5 -6]) ; 2 6 7
+(max-subarray [-2 -5 6 -2 -3 1 5 -6]); 2 6 7
+(max-subarray [-2 4])
