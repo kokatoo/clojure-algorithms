@@ -33,7 +33,6 @@
            right (max-subarray coll, (inc mid), high)
            cross (max-cross-subarray coll, low, mid, high)
            max-sum (max (:sum left) (:sum right) (:sum cross))]
-       (println left "," right "," cross "," max-sum)
        (cond (= max-sum (:sum left)) left
              (= max-sum (:sum right)) right
              :else cross)))))
@@ -42,4 +41,4 @@
 ;   (SubArray. 7 10 43))
 ;(max-subarray [13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7]); 7 10 43
 ;(max-subarray [-2 -5 6 -2 -3 1 5 -6]); 2 6 7
-(max-subarray [-2 4])
+;(max-subarray [-2 4])
