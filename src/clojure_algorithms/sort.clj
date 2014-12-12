@@ -64,3 +64,30 @@
    (fn [left right]
      (*merge-iter (trampoline #(merge-sort-iter left))
                   (trampoline #(merge-sort-iter right))))))
+                
+;; HeapSort
+(defn- swap [coll i j]
+  (assoc coll i (nth coll j) j (nth coll i)))
+(defn- in? [elm coll]
+  (some #(= elm %) coll))
+
+(defn- max-heapify [coll start end]
+  (loop [coll coll x start left (inc (* 2 x))]
+    (let [right (inc left)]
+      (if (>= left end)
+        coll
+        (let [child (if (and (< left (dec end)) (< (nth coll left) (nth coll right)))
+                   right
+                   left)]
+          (if (< (nth coll x) (nth coll child))
+            (recur (swap coll x child) child (inc (* 2 child)))
+            coll))))))
+
+
+(defn- build-max-heap
+  ([coll] (build-max-heap coll (count coll)))
+  ([coll len]
+    (reduce #(max-heapify %1 %2 len) (vec coll) (range (dec (int (/ len 2))) -1 -1))))
+
+(defn heapsort [coll]
+  (reduce #(max-heapify (swap %1 %2 0) 0 %2)(build-max-heap coll)(range (dec (count coll)) 0 -1)))
