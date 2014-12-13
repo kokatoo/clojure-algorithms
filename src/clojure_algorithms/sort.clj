@@ -91,17 +91,19 @@
     (reduce #(max-heapify %1 %2 len) (vec coll) (range (dec (int (/ len 2))) -1 -1))))
 
 (defn heapsort [coll]
+  "Heap Sort"
   (reduce #(max-heapify (swap %1 %2 0) 0 %2)(build-max-heap coll)(range (dec (count coll)) 0 -1)))
 
 ;; QuickSort
-(defn quicksort [[pivot & xs]]
+(defn quicksort [[pivot & xs :as coll]]
+  "Quick Sort"
   (if pivot
     (let [smaller (filter #(< % pivot) xs)
           bigger (filter #(> % pivot) xs)
-          pivots (filter #(= % pivot) xs)]
+          pivots (filter #(= % pivot) coll)]
        (lazy-cat (quicksort smaller)
-               pivots
-               [pivot]
-               (quicksort bigger)))
+                 pivots
+                 (quicksort bigger)))
     []))
+
 
