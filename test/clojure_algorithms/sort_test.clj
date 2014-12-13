@@ -47,3 +47,19 @@
            (range 1 101)))
   (is (= (merge-sort-iter unsorted) sorted)))
 
+(deftest heapsort-test
+  (is (= (heapsort []) []))
+  (is (= (heapsort (range 100 0 -1))
+           (range 1 101)))
+  (is (= (heapsort unsorted) sorted)))
+
+(deftest quicksort-test
+  (is (= (quicksort []) []))
+  (is (= (quicksort (range 100 0 -1))
+           (range 1 101)))
+  (is (= (quicksort unsorted) sorted)))
+
+;(time (insert-sort (take 10000 (cycle unsorted))))
+;(time (merge-sort (take 100000 (cycle unsorted))))
+;(time (heapsort (take 10000 (cycle unsorted))))
+;(time (quicksort (take 1000000 (cycle unsorted))))

@@ -13,13 +13,14 @@
 
 (defn *merge [left right]
   "Merge two sorted collections into sorted collection"
-  (cond (nil? left) right
-        (nil? right) left
-        :else (let [[l1 & *left] left
-                    [r1 & *right] right]
-                (if (<= l1 r1)
-                  (cons l1 (*merge *left right))
-                  (cons r1 (*merge left *right))))))
+  (lazy-seq
+   (cond (nil? left) right
+         (nil? right) left
+         :else (let [[l1 & *left] left
+                     [r1 & *right] right]
+                 (if (<= l1 r1)
+                   (cons l1 (*merge *left right))
+                   (cons r1 (*merge left *right)))))))
 
 (defn *merge-iter [left right]
   "Merge two sorted collections into sorted collection (iteration)"
@@ -64,7 +65,7 @@
    (fn [left right]
      (*merge-iter (trampoline #(merge-sort-iter left))
                   (trampoline #(merge-sort-iter right))))))
-                
+
 ;; HeapSort
 (defn- swap [coll i j]
   (assoc coll i (nth coll j) j (nth coll i)))
@@ -91,3 +92,16 @@
 
 (defn heapsort [coll]
   (reduce #(max-heapify (swap %1 %2 0) 0 %2)(build-max-heap coll)(range (dec (count coll)) 0 -1)))
+
+;; QuickSort
+(defn quicksort [[pivot & xs]]
+  (if pivot
+    (let [smaller (filter #(< % pivot) xs)
+          bigger (filter #(> % pivot) xs)
+          pivots (filter #(= % pivot) xs)]
+       (lazy-cat (quicksort smaller)
+               pivots
+               [pivot]
+               (quicksort bigger)))
+    []))
+
