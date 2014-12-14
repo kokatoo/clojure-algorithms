@@ -106,4 +106,15 @@
                  (quicksort bigger)))
     []))
 
-
+(defn rand-quicksort [coll]
+  "Rand Pivot QuickSort"
+  (if (empty? coll)
+    []
+    (let [pivot (nth coll (rand-int (count coll)))
+          xs (remove #(= % pivot) coll)
+          smaller (filter #(< % pivot) xs)
+          bigger (filter #(> % pivot) xs)
+          pivots (filter #(= % pivot) coll)]
+      (lazy-cat (rand-quicksort smaller)
+                pivots
+                (rand-quicksort bigger)))))
