@@ -59,6 +59,12 @@
            (range 1 101)))
   (is (= (quicksort unsorted) sorted)))
 
+(deftest countingsort-test
+  (is (= (countingsort [] 100) []))
+  (is (= (countingsort (range 100 0 -1) 150)
+           (range 1 101)))
+  (is (= (countingsort unsorted 9999) sorted)))
+
 ;(time (insert-sort (take 10000 (cycle unsorted))))
 ;(time (merge-sort (take 100000 (cycle unsorted))))
 ;(time (heapsort (take 10000 (cycle unsorted))))
