@@ -123,16 +123,16 @@
 (defn countingsort [coll k]
   (let [len (count coll)
         coll (vec coll)
-        C (reduce (fn [acc idx]
-                    (let [elm (nth coll idx)]
-                      (assoc acc elm (inc (acc elm))))) (-> (replicate k 0) vec) (range len))
-        C (reduce (fn [acc idx]
-                    (assoc acc idx (+ (acc idx) (acc (dec idx))))) C (range 1 k))]
-    (loop [B (vec (replicate len 0)) C C idx (dec len)]
+        counts-eq (reduce (fn [acc idx]
+                      (let [elm (nth coll idx)]
+                        (assoc acc elm (inc (acc elm))))) (-> (replicate k 0) vec) (range len))
+        counts-less-eq (reduce (fn [acc idx]
+                    (assoc acc idx (+ (acc idx) (acc (dec idx))))) counts-eq (range 1 k))]
+    (loop [result (vec (replicate len 0)) counts counts-less-eq idx (dec len)]
       (if (= idx -1)
-        (rest B)
-        (recur (assoc B (C (nth coll idx)) (nth coll idx))
-               (assoc C (coll idx) (dec (C (coll idx))))
+        (rest result)
+        (recur (assoc result (counts (nth coll idx)) (nth coll idx))
+               (assoc counts (coll idx) (dec (counts (coll idx))))
                (dec idx))))))
 
 (countingsort [4 3 2 1 2 3] 10)
