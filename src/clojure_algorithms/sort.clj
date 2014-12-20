@@ -151,6 +151,7 @@
                 (assoc counts (get-elm coll idx) (dec (counts (get-elm coll idx))))
                 (dec idx)))))))
 
+;; Radix Sort
 (defn- ret-pos [num base pos]
   "Returns the digit by pos"
   (let [exp (Math/pow base pos)]
