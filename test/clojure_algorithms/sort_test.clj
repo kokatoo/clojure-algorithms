@@ -65,7 +65,15 @@
            (range 1 101)))
   (is (= (countingsort unsorted 9999) sorted)))
 
+(deftest radixsort-test
+  (is (= (radixsort [] 1) []))
+  (is (= (radixsort (range 100 0 -1) 3)
+           (range 1 101)))
+  (is (= (radixsort unsorted 4) sorted)))
+
 ;(time (insert-sort (take 10000 (cycle unsorted))))
 ;(time (merge-sort (take 100000 (cycle unsorted))))
 ;(time (heapsort (take 10000 (cycle unsorted))))
 ;(time (quicksort (take 1000000 (cycle unsorted))))
+;(time (countingsort (take 1000000 (cycle unsorted)) 10000))
+;(time (radixsort (take 1000000 (cycle unsorted)) 4))

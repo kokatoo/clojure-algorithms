@@ -120,20 +120,53 @@
                 (rand-quicksort bigger)))))
 
 ;; Counting Sort
-(defn countingsort [coll k]
+(defn- counts-less-eq [coll n-buckets fn-idx]
+  "Returns a vector of counts <= to index"
   (let [len (count coll)
-        coll (vec coll)
         counts-eq (reduce (fn [acc idx]
-                      (let [elm (nth coll idx)]
-                        (assoc acc elm (inc (acc elm))))) (-> (replicate k 0) vec) (range len))
-        counts-less-eq (reduce (fn [acc idx]
-                    (assoc acc idx (+ (acc idx) (acc (dec idx))))) counts-eq (range 1 k))]
-    (loop [result (vec (replicate len 0)) counts counts-less-eq idx (dec len)]
-      (if (= idx -1)
-        (rest result)
-        (recur (assoc result (counts (nth coll idx)) (nth coll idx))
-               (assoc counts (coll idx) (dec (counts (coll idx))))
-               (dec idx))))))
+                            (let [elm (fn-idx coll idx)]
+                              (assoc acc elm (inc (acc elm)))))
+                          (-> (replicate n-buckets 0) vec)
+                          (range len))]
+    (reduce (fn [acc idx]
+              (assoc acc idx (+ (acc idx) (acc (dec idx)))))
+            counts-eq
+            (range 1 n-buckets))))
 
-(countingsort [4 3 2 1 2 3] 10)
-(countingsort (range 100 0 -1) 150)
+(defn countingsort
+  "Counting Sort"
+  ([coll n-buckets] (countingsort coll
+                                  n-buckets
+                                  (fn [coll idx]
+                                    (nth coll idx))))
+  ([coll n-buckets get-elm]
+   (let [len (count coll)
+         coll (vec coll)]
+     (loop [result (vec (replicate len 0))
+            counts (counts-less-eq coll n-buckets get-elm)
+            idx (dec len)]
+       (if (= idx -1)
+         (rest result)
+         (recur (assoc result (counts (get-elm coll idx)) (nth coll idx))
+                (assoc counts (get-elm coll idx) (dec (counts (get-elm coll idx))))
+                (dec idx)))))))
+
+(defn- ret-pos [num base pos]
+  "Returns the digit by pos"
+  (let [exp (Math/pow base pos)]
+    (-> (/ num exp)
+        (mod base)
+        int)))
+
+(defn radixsort [coll ndigits]
+  (let [len (count coll)
+        coll (vec coll)]
+    (loop [i 0 result coll]
+      (if (= i ndigits)
+        result
+        (recur (inc i)
+               (countingsort result
+                             10
+                             (fn [coll idx]
+                               (ret-pos (nth coll idx) 10 i))))))))
+
