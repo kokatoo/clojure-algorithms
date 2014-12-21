@@ -48,23 +48,18 @@
       (let [[left right] (split-at (/ (count coll) 2) coll)]
         (*merge-sort left right)))))
 
-
-(defn merge-sort
+(defn merge-sort [coll]
   "Merge Sort (Recursive)"
-  [coll]
-  (merge-sort-wrapper
-   coll
-   (fn [left right]
-     (*merge (merge-sort left) (merge-sort right)))))
+  (merge-sort-wrapper coll
+                      (fn [left right]
+                        (*merge (merge-sort left) (merge-sort right)))))
 
-(defn merge-sort-iter
+(defn merge-sort-iter [coll]
   "Merge Sort (Iterative)"
-  [coll]
-  (merge-sort-wrapper
-   coll
-   (fn [left right]
-     (*merge-iter (trampoline #(merge-sort-iter left))
-                  (trampoline #(merge-sort-iter right))))))
+  (merge-sort-wrapper coll
+                      (fn [left right]
+                        (*merge-iter (trampoline #(merge-sort-iter left))
+                                     (trampoline #(merge-sort-iter right))))))
 
 ;; HeapSort
 (defn- swap [coll i j]
@@ -83,7 +78,6 @@
           (if (< (nth coll x) (nth coll child))
             (recur (swap coll x child) child (inc (* 2 child)))
             coll))))))
-
 
 (defn- build-max-heap
   ([coll] (build-max-heap coll (count coll)))
@@ -160,6 +154,7 @@
         int)))
 
 (defn radixsort [coll ndigits]
+  "Radix Sort"
   (let [len (count coll)
         coll (vec coll)]
     (loop [i 0 result coll]
