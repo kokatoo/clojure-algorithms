@@ -10,3 +10,14 @@
          (SubArray. 2 6 7)))
   (is (= (max-subarray [-2 4])
          (SubArray. 1 1 4))))
+
+(deftest cut-rod-test
+  (is (= (cut-rod [0 1 5 8 9 10 17 17 20 24 30] 4)
+         10))
+  (is (= (cut-rod [0 1 5 8 9 10 17 17 20] 8)
+         22))
+  (is (= (cut-rod [0 3 5 8 9 10 17 17 20] 8)
+         24)))
+
+
+
