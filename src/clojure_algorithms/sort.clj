@@ -5,10 +5,11 @@
   [coll]
   (letfn [(insert
            [elm coll]
-           (into []
-                 (concat (filter #(<= % elm) coll)
-                         [elm]
-                         (filter #(> % elm) coll))))]
+           (into
+            []
+            (concat (filter #(<= % elm) coll)
+                    [elm]
+                    (filter #(> % elm) coll))))]
     (loop [left []
            right coll]
       (if (empty? right)
@@ -36,14 +37,11 @@
                  [r1 & *right] right]
              (cond
               (and (nil? l1) (nil? r1)) result
-              (and (some? l1) (some? r1))
-              (if (<= l1 r1)
-                (recur *left right (conj result l1))
-                (recur left *right (conj result r1)))
-              (nil? l1)
-              (recur left *right (conj result r1))
-              (nil? r1)
-              (recur *left right (conj result l1)))))]
+              (and (some? l1) (some? r1)) (if (<= l1 r1)
+                                            (recur *left right (conj result l1))
+                                            (recur left *right (conj result r1)))
+              (nil? l1) (recur left *right (conj result r1))
+              (nil? r1) (recur *left right (conj result l1)))))]
     (**merge left right [])))
 
 (defn merge-sort-wrapper

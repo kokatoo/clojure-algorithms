@@ -1,5 +1,4 @@
 (ns clojure-algorithms.optimization)
-
 (defrecord SubArray [low high sum])
 
 (defn max-idx-sum
@@ -42,3 +41,25 @@
 ;(max-subarray [13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7]); 7 10 43
 ;(max-subarray [-2 -5 6 -2 -3 1 5 -6]); 2 6 7
 ;(max-subarray [-2 4])
+
+(defn cut-rod [prices, rod-len]
+  (loop [r [0] i 1 i-max nil]
+    (if (> i rod-len)
+      (nth r rod-len)
+      (let [i-max (reduce (fn [acc j]
+                            (let [j-max (+ (nth prices j) (nth r (- i j)))]
+                              (if (nil? acc)
+                                j-max
+                                (max acc j-max))))
+                          (range 1 (inc i)))]
+        (recur (conj r i-max)(inc i) i-max)))))
+
+
+;(cut-rod [0 1 5 8 9 10 17 17 20 24 30] 4)
+
+
+
+
+
+
+
