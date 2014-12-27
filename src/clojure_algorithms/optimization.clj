@@ -36,20 +36,28 @@
              (= max-sum (:sum right)) right
              :else cross)))))
 
-(defn cut-rod [prices, rod-len]
-  (loop [result [0] i 1 i-max nil]
+(defn cut-rod-aux [prices, rod-len]
+  (loop [results [0] paths [0] i 1]
     (if (> i rod-len)
-      (nth result rod-len)
-      (let [i-max (reduce (fn [acc j]
-                            (let [j-max (+ (nth prices j) (nth result (- i j)))]
-                              (if (nil? acc)
-                                j-max
-                                (max acc j-max))))
-                          nil
-                          (range 1 (inc i)))]
-        (recur (conj result i-max)(inc i) i-max)))))
+      [results paths]
+      (let [[i-max prev] (reduce (fn [acc j]
+                                    (let [j-max (+ (nth prices j) (nth results (- i j)))]
+                                      (if (or (nil? acc) (> j-max (first acc)))
+                                        [j-max j]
+                                        acc)))
+                                  nil
+                                  (range 1 (inc i)))]
+        (recur (conj results i-max) (conj paths prev) (inc i))))))
+
+(defn cut-rod [prices rod-len]
+  (let [[results paths] (cut-rod-aux prices rod-len)]
+    (loop [idx rod-len path []]
+      (if (> idx 0)
+        (recur (- idx (nth paths idx)) (conj path (nth paths idx)))
+        [(nth results rod-len) path]))))
 
 
-;(cut-rod [0 1 5 8 9 10 17 17 20 24 30] 4)
-;(cut-rod [0 1 5 8 9 10 17 17 20] 8)
-;(cut-rod [0 3 5 8 9 10 17 17 20] 8)
+(cut-rod [0 1 5 8 9 10 17 17 20 24 30] 4)
+(cut-rod [0 1 5 8 9 10 17 17 20] 8)
+(cut-rod [0 3 5 8 9 10 17 17 20] 8)
+(cut-rod [0 1 5 8 9 10 17 17 20 24 30] 4)
