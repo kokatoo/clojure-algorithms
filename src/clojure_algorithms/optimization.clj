@@ -57,7 +57,59 @@
         [(nth results rod-len) path]))))
 
 
-(cut-rod [0 1 5 8 9 10 17 17 20 24 30] 4)
-(cut-rod [0 1 5 8 9 10 17 17 20] 8)
-(cut-rod [0 3 5 8 9 10 17 17 20] 8)
-(cut-rod [0 1 5 8 9 10 17 17 20 24 30] 4)
+;(cut-rod [0 1 5 8 9 10 17 17 20 24 30] 4)
+;(cut-rod [0 1 5 8 9 10 17 17 20] 8)
+;(cut-rod [0 3 5 8 9 10 17 17 20] 8)
+;(cut-rod [0 1 5 8 9 10 17 17 20 24 30] 4)
+
+;; WIP
+(defn m-c3 [p m i j]
+  (loop [k i m (assoc-in m [i j] nil)]
+    (println m)
+    (if (> k (dec j))
+      m
+      (let [q (+ (get-in m [i k])
+                 (get-in m [(inc k) j])
+                 (* (p (dec i))
+                    (p k)
+                    (p j)))]
+        (println m ", k: " k ", i: " i ", j: " j)
+        (println "q2: " q)
+        (if (or (nil? (get-in m [i j])) (< q (get-in m [i j])))
+          (recur (inc k)(assoc-in m [i j] q))
+          (recur (inc k) m))))))
+
+(defn m-c2 [p m l n]
+  (loop [m m i 1]
+    (if (> i (- n l -1))
+      m
+      (let [m (m-c3 p m i (+ i l -1))]
+        (recur m (inc i))))))
+
+(defn matrix-chain [p n]
+  (loop [l 2 m (->> 0 (replicate (inc n)) vec (replicate (inc n)) vec)]
+    (if (> l n)
+      m
+      (let [m (m-c2 p m l n)]
+        (recur (inc l) m)))))
+
+(matrix-chain [40 20 30 10 30] 4)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
