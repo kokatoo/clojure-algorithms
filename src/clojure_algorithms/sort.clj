@@ -1,20 +1,45 @@
 (ns clojure-algorithms.sort)
 
+(defn- insert
+  "left of elm are <= and right of elm are >"
+  [elm coll]
+  (into [] (concat (filter #(<= % elm) coll), [elm], (filter #(> % elm) coll))))
+
 (defn insert-sort
-  "Insertion Sort"
+  "Insertion Sort using Clojure way"
   [coll]
-  (letfn [(insert
-           [elm coll]
-           (into
-            []
-            (concat (filter #(<= % elm) coll)
-                    [elm]
-                    (filter #(> % elm) coll))))]
-    (loop [left []
-           right coll]
-      (if (empty? right)
-        left
-        (recur (insert (first right) left) (rest right))))))
+  (loop [left []
+         right coll]
+    (if (empty? right)
+      left
+      (recur (insert (first right) left), (rest right)))))
+
+(defn- swap
+  "swap position idx1 with idx2"
+  [coll idx1 idx2]
+  (let [temp (nth coll idx1)
+        coll (assoc coll idx1 (nth coll idx2))]
+    (assoc coll idx2 temp)))
+
+(defn insert-swap
+  [idx coll]
+  (loop [coll coll
+         i idx
+         dec_i (dec idx)]
+    (if (and (pos? i) (> (nth coll dec_i) (nth coll i)))
+      (recur (swap coll i dec_i) dec_i (dec dec_i))
+      coll)))
+
+(defn insert-sort-swap
+  "Insertion sort using swap"
+  [coll]
+  (loop [coll (vec coll)
+         i 1
+         n (count coll)]
+    (if (< i n)
+      (recur (insert-swap i coll) (inc i) n)
+      coll)))
+
 
 (defn *merge
   "Merge two sorted collections into sorted collection"

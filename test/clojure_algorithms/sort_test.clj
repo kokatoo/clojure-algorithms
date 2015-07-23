@@ -29,6 +29,12 @@
        8765 8782 8882 8890 8895 8912 8915 8960 8991 9053 9060 9061 9096 9122 9130 9137 9169 9262 9264 9267 9271 9294 9309 9368 9382 9382 9463 9518
        9520 9572 9652 9659 9676 9750 9813 9817 9819 9822 9839 9872 9966))
 
+(deftest insert-sort-swap-test
+  (is (= (insert-sort-swap []) []))
+  (is (= (insert-sort-swap (range 100 0 -1))
+           (range 1 101)))
+  (is (= (insert-sort-swap unsorted) sorted)))
+
 (deftest insert-sort-test
   (is (= (insert-sort []) []))
   (is (= (insert-sort (range 100 0 -1))
