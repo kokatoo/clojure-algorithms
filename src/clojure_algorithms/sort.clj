@@ -6,7 +6,7 @@
   (into [] (concat (filter #(<= % elm) coll), [elm], (filter #(> % elm) coll))))
 
 (defn insert-sort
-  "Insertion Sort using Clojure way"
+  "Insertion sort"
   [coll]
   (loop [left []
          right coll]
@@ -14,31 +14,23 @@
       left
       (recur (insert (first right) left), (rest right)))))
 
-(defn- swap
-  "swap position idx1 with idx2"
-  [coll idx1 idx2]
-  (let [temp (nth coll idx1)
-        coll (assoc coll idx1 (nth coll idx2))]
-    (assoc coll idx2 temp)))
+(defn h-insert-sort
+  "Generalized version of insert with gap h."
+  [coll start h]
+  (let [hcoll (partition h coll)
+        first-hcoll (map first hcoll)
+        rest-hcoll (map rest hcoll)]
+    (->> rest-hcoll
+         (interleave (insert-sort first-hcoll))
+         flatten)))
 
-(defn insert-swap
-  [idx coll]
-  (loop [coll coll
-         i idx
-         dec_i (dec idx)]
-    (if (and (pos? i) (> (nth coll dec_i) (nth coll i)))
-      (recur (swap coll i dec_i) dec_i (dec dec_i))
-      coll)))
-
-(defn insert-sort-swap
-  "Insertion sort using swap"
+(defn shell-sort
   [coll]
-  (loop [coll (vec coll)
-         i 1
-         n (count coll)]
-    (if (< i n)
-      (recur (insert-swap i coll) (inc i) n)
-      coll)))
+  (let [gaps (rest (take-while pos? (iterate #(quot % 2) (count coll))))]
+    (reduce (fn [coll gap] ; h-sort for each gap
+              (reduce #(h-insert-sort % %2 gap) coll (range gap))) ; for each gap, h-sort for first h indexes
+            coll  
+            gaps)))
 
 
 (defn *merge
@@ -129,7 +121,7 @@
           (build-max-heap coll)
           (range (dec (count coll)) 0 -1)))
 
-;; QuickSort
+;; Quickort
 (defn quicksort
   "Quick Sort"
   [[pivot & xs :as coll]]
